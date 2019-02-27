@@ -35,20 +35,23 @@
 // teplota[2] = T3 - teplota okolia
 float teplota[MAX_DS1820_SENSORS];
 
-// signalizacna LED
-int ledPin = 0;
-
 // definovanie vstupov a výstupov arduina
-int relayPin = 9; // relé je na pine 3
+// signalizacna LED
+int ledPin = 0; // LED je na pine D0
+// rele spustajuce motor
+int relayPin = 9; // relé je na pine D9
 int num_temp = 0; //pocet teplomerov pripojenych
 // vytvoření instance oneWireDS z knihovny OneWire
-OneWire  oneWireDS(1);  // teplomery sú na pine 13
+// teplomery
+OneWire  oneWireDS(1);  // teplomery sú na pine D1
 // vytvoření instance senzoryDS z knihovny DallasTemperature
 DallasTemperature senzoryDS(&oneWireDS);
 
 byte addr[MAX_DS1820_SENSORS][8];
 char buf[20];
+
 // definovanie rozhrania displeja (rs, enable, d4, d5, d6, d7)
+// D2, D3, D4, D5, D6, D7
 LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 
 // na začiatok čerpadlo stojí
@@ -107,12 +110,12 @@ void setup() {
 
 // riadenie ohrevu
 void loop() {
-    // zapne led
-    digitalWrite(ledPin, HIGH);  // HIGH is off, LOW is on
+
+    // zapne LED
+    digitalWrite(ledPin, LOW);  // HIGH is off, LOW is on
     // načíta všetky teplomery
     byte sensor;
     senzoryDS.requestTemperatures();
-
     // uloží teploty do poľa teplota
     for (sensor=0;sensor < num_temp;sensor++) {
         teplota[sensor]=senzoryDS.getTempCByIndex(sensor);
@@ -155,8 +158,8 @@ void loop() {
         delay(1000);
     }
 
-    // vypne led led
-    digitalWrite(ledPin, LOW);  // HIGH is off, LOW is on
+    // vypne LED
+    digitalWrite(ledPin, HIGH);  // HIGH is off, LOW is on
     delay(1000);
 
 }
